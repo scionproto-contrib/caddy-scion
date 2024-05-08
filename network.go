@@ -93,7 +93,10 @@ func (n *Network) ListenBlocked(
 	if err != nil {
 		return nil, err
 	}
-	return &blockedListener{conn}, nil
+	return &blockedListener{
+		conn:   conn,
+		closed: make(chan struct{}),
+	}, nil
 }
 
 // Listen returns a net.PacketConn that listens on the given address. It is used
@@ -170,7 +173,6 @@ func (n *Network) listen(ctx context.Context, address string, cfg net.ListenConf
 			PacketConn: c,
 			addr:       address,
 			network:    n,
-			closed:     make(chan struct{}),
 		}, nil
 	})
 	if err != nil {
@@ -196,7 +198,6 @@ type conn struct {
 	net.PacketConn
 	addr    string
 	network *Network
-	closed  chan struct{}
 }
 
 // Close removes the reference in the usage pool. If the references go to zero,
@@ -212,7 +213,6 @@ func (c *conn) Destruct() error {
 	c.network.Logger().Debug("destroying listener", zap.String("addr", c.addr))
 	defer c.network.Logger().Debug("destroyed listener", zap.String("addr", c.addr))
 
-	close(c.closed)
 	return c.PacketConn.Close()
 }
 
@@ -220,6 +220,7 @@ func (c *conn) Destruct() error {
 // blocks until the underlying connection is closed.
 type blockedListener struct {
 	*conn
+	closed chan struct{}
 }
 
 func (l *blockedListener) Accept() (net.Conn, error) {
@@ -227,8 +228,13 @@ func (l *blockedListener) Accept() (net.Conn, error) {
 	defer l.network.Logger().
 		Debug("stopped accepting on blocked listener", zap.String("addr", l.addr))
 
-	<-l.conn.closed
+	<-l.closed
 	return nil, fmt.Errorf("listener closed")
+}
+
+func (l *blockedListener) Close() error {
+	close(l.closed)
+	return l.conn.Close()
 }
 
 func (l *blockedListener) Addr() net.Addr {
