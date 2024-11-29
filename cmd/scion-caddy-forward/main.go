@@ -17,10 +17,8 @@ package main
 import (
 	caddycmd "github.com/caddyserver/caddy/v2/cmd"
 	_ "github.com/caddyserver/caddy/v2/modules/standard"
-	_ "github.com/mholt/caddy-l4"
 
 	_ "github.com/scionassociation/http-proxy/forward/caddy"
-	_ "github.com/scionassociation/http-proxy/reverse/caddy"
 )
 
 func main() {
