@@ -7,7 +7,13 @@ toolchain go1.22.3
 require (
 	github.com/caddyserver/caddy/v2 v2.8.4
 	github.com/mholt/caddy-l4 v0.0.0-20240628163618-ca3e2f38f6e5
-	github.com/scionassociation/http-proxy v0.0.0-20240509183442-62759503f434
+	github.com/netsec-ethz/scion-apps v0.5.1-0.20241007105241-3f7a7dd6e9c0
+	github.com/quic-go/quic-go v0.44.0
+	github.com/scionproto-contrib/http-proxy v0.0.0-20240509183442-62759503f434
+	github.com/scionproto/scion v0.11.1-0.20240610170620-50b971ca2d4b
+	github.com/stretchr/testify v1.9.0
+	go.uber.org/zap v1.27.0
+	golang.org/x/net v0.26.0
 )
 
 require (
@@ -31,6 +37,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/chzyer/readline v1.5.1 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.4 // indirect
+	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dchest/cmac v1.0.0 // indirect
 	github.com/dgraph-io/badger v1.6.2 // indirect
 	github.com/dgraph-io/badger/v2 v2.2007.4 // indirect
@@ -95,22 +102,20 @@ require (
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/netsec-ethz/rains v0.5.1-0.20240619143424-8e9ef27f2403 // indirect
-	github.com/netsec-ethz/scion-apps v0.5.1-0.20241007105241-3f7a7dd6e9c0 // indirect
 	github.com/onsi/ginkgo/v2 v2.17.3 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.2 // indirect
 	github.com/pires/go-proxyproto v0.7.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/prometheus/client_golang v1.19.1 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.53.0 // indirect
 	github.com/prometheus/procfs v0.14.0 // indirect
 	github.com/quic-go/qpack v0.4.0 // indirect
-	github.com/quic-go/quic-go v0.44.0 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/rs/xid v1.5.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
-	github.com/scionproto/scion v0.11.1-0.20240610170620-50b971ca2d4b // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
@@ -155,13 +160,11 @@ require (
 	go.uber.org/automaxprocs v1.5.3 // indirect
 	go.uber.org/mock v0.4.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	go.uber.org/zap v1.27.0 // indirect
 	go.uber.org/zap/exp v0.2.0 // indirect
 	golang.org/x/crypto v0.24.0 // indirect
 	golang.org/x/crypto/x509roots/fallback v0.0.0-20240507223354-67b13616a595 // indirect
 	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842 // indirect
 	golang.org/x/mod v0.17.0 // indirect
-	golang.org/x/net v0.26.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect
 	golang.org/x/sys v0.21.0 // indirect
 	golang.org/x/term v0.21.0 // indirect
@@ -184,4 +187,4 @@ require (
 	modernc.org/token v1.1.0 // indirect
 )
 
-replace github.com/scionassociation/http-proxy => ../http-proxy
+replace github.com/scionproto-contrib/http-proxy => ../http-proxy

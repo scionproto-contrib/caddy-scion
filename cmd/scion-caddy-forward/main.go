@@ -18,7 +18,7 @@ import (
 	caddycmd "github.com/caddyserver/caddy/v2/cmd"
 	_ "github.com/caddyserver/caddy/v2/modules/standard"
 
-	_ "github.com/scionassociation/http-proxy/forward/caddy"
+	_ "github.com/scionproto-contrib/caddy-scion/forward"
 )
 
 func main() {
