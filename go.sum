@@ -430,6 +430,8 @@ github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQD
 github.com/satori/go.uuid v1.2.0/go.mod h1:dA0hQrYB0VpLJoorglMZABFdXlWrHn1NEOzdhQKdks0=
 github.com/schollz/jsonstore v1.1.0 h1:WZBDjgezFS34CHI+myb4s8GGpir3UMpy7vWoCeO0n6E=
 github.com/schollz/jsonstore v1.1.0/go.mod h1:15c6+9guw8vDRyozGjN3FoILt0wpruJk9Pi66vjaZfg=
+github.com/scionproto-contrib/http-proxy v0.0.0-20241129123532-4b72b92bf106 h1:WfUFbW//iJzB9L2Vw78lJH42jfx5WZfDciJ9x4xZNZA=
+github.com/scionproto-contrib/http-proxy v0.0.0-20241129123532-4b72b92bf106/go.mod h1:29T6VtSABC0HQs/pmMkaVLVrpuBummQ/o/TJlVIM83E=
 github.com/scionproto/scion v0.11.1-0.20240610170620-50b971ca2d4b h1:n4jkPRHGsPC4xNCkVXhOy2qzqUGuMrO6A1zuY1W/2FY=
 github.com/scionproto/scion v0.11.1-0.20240610170620-50b971ca2d4b/go.mod h1:paxrF6VreownCN7E7Rdri6ifXMkiq3leFGoP6n/BFC4=
 github.com/shopspring/decimal v0.0.0-20180709203117-cd690d0c9e24/go.mod h1:M+9NzErvs504Cn4c5DxATwIqPbtswREoFCre64PpcG4=
