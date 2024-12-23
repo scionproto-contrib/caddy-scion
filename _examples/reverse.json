@@ -16,10 +16,10 @@
                     "logs": {},
                     "metrics": {},
                     "listen": [
-                        ":7080",
-                        ":7443",
+                        ":443",
                         "scion/:7080",
-                        "scion/:7443"
+                        "scion/:7443",
+                        "scion3/:8443"
                     ],
                     "automatic_https": {
                         "disable_redirects": true
@@ -71,7 +71,7 @@
                             ]
                         }
                     ],
-                    "Protocols": ["h1", "h2"]
+                    "Protocols": ["h1", "h2","h3"]
                 }
             }
         },

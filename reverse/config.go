@@ -16,6 +16,7 @@ package reverse
 
 import (
 	"github.com/caddyserver/caddy/v2"
+	"go.uber.org/zap"
 )
 
 var (
@@ -46,6 +47,7 @@ func (SCION) CaddyModule() caddy.ModuleInfo {
 }
 
 func (s *SCION) Provision(ctx caddy.Context) error {
+	zap.ReplaceGlobals(ctx.Logger())
 	globalNetwork.SetLogger(ctx.Logger())
 	return nil
 }

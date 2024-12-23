@@ -15,37 +15,27 @@
 package reverse
 
 import (
-	"context"
-	"crypto/tls"
-	"net/netip"
-
 	"github.com/caddyserver/caddy/v2"
-	"github.com/netsec-ethz/scion-apps/pkg/pan"
-	"github.com/quic-go/quic-go"
+	"github.com/caddyserver/caddy/v2/modules/caddyhttp"
 
 	"github.com/scionproto-contrib/http-proxy/reverse"
 )
 
 var (
-	globalNetwork = reverse.Network{
-		Pool:         NewUsagePool[string, *reverse.ReusableListener](),
-		QUICListener: &panListener{},
-	}
+	globalNetwork = reverse.NewNetwork(NewUsagePool[string, reverse.Reusable]())
 )
 
 func init() {
 	globalNetwork.SetNopLogger()
-	caddy.RegisterNetwork(reverse.SCIONNetwork, globalNetwork.ListenSCION) // used for HTTP over SCION
+	caddy.RegisterNetwork(reverse.SCION, globalNetwork.Listen)      // used for HTTP1.1/2 over QUIC/UDP/SCION
+	caddy.RegisterNetwork(reverse.SCIONDummy, globalNetwork.Listen) // used to fake HTTP3 over UDP/SCION (on same port as SCION)
+	caddy.RegisterNetwork(reverse.SCION3, globalNetwork.Listen)     // used to fake HTTP1.1/2 over TCP/SCION
+	caddy.RegisterNetwork(reverse.SCION3QUIC, globalNetwork.Listen) // used for HTTP3 over UDP/SCION
+	caddyhttp.RegisterNetworkHTTP3(reverse.SCION3, reverse.SCION3QUIC)
+	caddyhttp.RegisterNetworkHTTP3(reverse.SCION, reverse.SCIONDummy)
 }
 
 // Interface guards
 var (
-	_ caddy.ListenerFunc = (*reverse.Network)(nil).ListenSCION
+	_ caddy.ListenerFunc = (*reverse.Network)(nil).Listen
 )
-
-type panListener struct{}
-
-func (*panListener) Listen(ctx context.Context, local netip.AddrPort, selector pan.ReplySelector,
-	tlsConf *tls.Config, quicConfig *quic.Config) (*quic.Listener, error) {
-	return pan.ListenQUIC(ctx, local, selector, tlsConf, quicConfig)
-}
