@@ -11,7 +11,7 @@
             "servers": {
                 "scionlab": {
                     "listen": [
-                        "scion/:443"
+                        "scion+single-stream/[1-ff00:0:112,127.0.0.1]:443"
                     ],
                     "routes": [
                         {

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package reverse
+package native
 
 import (
 	"github.com/caddyserver/caddy/v2"
@@ -20,7 +20,6 @@ import (
 
 	"github.com/scionproto-contrib/caddy-scion/networks/dummy"
 	"github.com/scionproto-contrib/caddy-scion/networks/native"
-	"github.com/scionproto-contrib/caddy-scion/networks/singlestream"
 )
 
 var (
@@ -57,10 +56,7 @@ func (SCION) CaddyModule() caddy.ModuleInfo {
 func (s *SCION) Provision(ctx caddy.Context) error {
 	dummy.SetLogger(ctx.Logger())
 	native.SetLogger(ctx.Logger())
-	singlestream.SetLogger(ctx.Logger())
-
 	native.SetPacketConnMetrics(metrics)
-	singlestream.SetPacketConnMetrics(metrics)
 	return nil
 }
 

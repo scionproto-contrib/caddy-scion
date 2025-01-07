@@ -23,6 +23,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
 	"net/url"
 	"os"
@@ -36,7 +37,10 @@ import (
 	"github.com/caddyserver/caddy/v2/modules/caddypki"
 	"github.com/caddyserver/caddy/v2/modules/caddytls"
 	"github.com/netsec-ethz/scion-apps/pkg/pan"
+	"github.com/scionproto/scion/pkg/addr"
 	"github.com/scionproto/scion/pkg/daemon"
+	"github.com/scionproto/scion/pkg/snet"
+	"github.com/scionproto/scion/private/app/env"
 	"go.uber.org/zap"
 
 	caddyscion "github.com/scionproto-contrib/caddy-scion/forward"
@@ -44,6 +48,7 @@ import (
 )
 
 var (
+	serverAddr = flag.String("server-addr", "127.0.0.1", "local-address for forward/reverse proxy")
 	sciondAddr = flag.String("sciond-address", "127.0.0.1:30255", "address to the scion daemon")
 
 	targetServerResponseBody = []byte("hello from test server")
@@ -108,9 +113,31 @@ func TestGetTargetOverIP(t *testing.T) {
 
 func TestMain(m *testing.M) {
 	flag.Parse()
-	err := checkScionConfiguration(*sciondAddr)
+	// Check for forward proxy
+	// err := checkScionConfiguration(*sciondAddr)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// Check for reverse proxy
+	ia, err := iaFromEnvironment()
 	if err != nil {
 		panic(err)
+	}
+	reverseHTTPAddr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", *serverAddr, reverseProxyHTTPPort))
+	if err != nil {
+		panic(err)
+	}
+	reverseHTTPSAddr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", *serverAddr, reverseProxyHTTPsPort))
+	if err != nil {
+		panic(err)
+	}
+	reverseSCIONHTTPAddr := &snet.UDPAddr{
+		IA:   ia,
+		Host: reverseHTTPAddr,
+	}
+	reverseSCIONHTTPSAddr := &snet.UDPAddr{
+		IA:   ia,
+		Host: reverseHTTPSAddr,
 	}
 
 	handlerJSON := func(h caddyhttp.MiddlewareHandler) json.RawMessage {
@@ -139,23 +166,26 @@ func TestMain(m *testing.M) {
 			},
 			"reverse": {
 				Listen: []string{
-					fmt.Sprintf(":%d", reverseProxyHTTPPort),
-					fmt.Sprintf(":%d", reverseProxyHTTPsPort),
-					fmt.Sprintf("scion/:%d", reverseProxyHTTPPort),
-					fmt.Sprintf("scion/:%d", reverseProxyHTTPsPort),
+					reverseHTTPAddr.String(),
+					reverseHTTPSAddr.String(),
+					fmt.Sprintf("scion+single-stream/%s", reverseSCIONHTTPAddr.String()),
+					fmt.Sprintf("scion+single-stream/%s", reverseSCIONHTTPSAddr.String()),
 				},
 				Routes: caddyhttp.RouteList{
 					caddyhttp.Route{
 						MatcherSetsRaw: caddyhttp.RawMatcherSets{
 							caddy.ModuleMap{"host": json.RawMessage(hostJSON)},
 						},
-						HandlersRaw: []json.RawMessage{handlerJSON(&reverseproxy.Handler{
-							Upstreams: reverseproxy.UpstreamPool{
-								&reverseproxy.Upstream{
-									Dial: fmt.Sprintf("%s:%d", targetServerHost, targetServerPort),
+						HandlersRaw: []json.RawMessage{
+							json.RawMessage(`{"handler": "detect_scion"}`),
+							handlerJSON(&reverseproxy.Handler{
+								Upstreams: reverseproxy.UpstreamPool{
+									&reverseproxy.Upstream{
+										Dial: fmt.Sprintf("%s:%d", targetServerHost, targetServerPort),
+									},
 								},
-							},
-						})},
+							}),
+						},
 					},
 				},
 				// We disable HTTP/3 over IP for the reverse proxy server because it will clash with the scion listener
@@ -407,4 +437,52 @@ func findSciond(ctx context.Context) (daemon.Connector, error) {
 		return nil, fmt.Errorf("unable to connect to SCIOND at %s (provide as flag or override with SCION_DAEMON_ADDRESS): %w", address, err)
 	}
 	return sciondConn, nil
+}
+
+func iaFromEnvironment() (addr.IA, error) {
+	e, err := loadEnv()
+	if err != nil {
+		return addr.IA(0), fmt.Errorf("error loading SCION environment: %w", err)
+	}
+	if len(e.ASes) != 1 {
+		return addr.IA(0), fmt.Errorf("expected exactly one AS in the environment, got %d", len(e.ASes))
+	}
+	var ia addr.IA
+	var as env.AS
+	for k, a := range e.ASes {
+		ia = k
+		as = a
+		break
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := checkSciond(ctx, as); err != nil {
+		return addr.IA(0), fmt.Errorf("unable to connect to AS %s SCIOND at %s: %w", ia, as.DaemonAddress, err)
+	}
+	return ia, nil
+}
+
+func checkSciond(ctx context.Context, as env.AS) error {
+	_, err := daemon.NewService(as.DaemonAddress).Connect(ctx)
+	if err != nil {
+		return err
+	}
+	os.Setenv("SCION_DAEMON_ADDRESS", as.DaemonAddress)
+	return nil
+}
+
+func loadEnv() (env.SCION, error) {
+	envFile := os.Getenv("SCION_ENV_FILE")
+	if envFile == "" {
+		envFile = "/etc/scion/environment.json"
+	}
+	raw, err := os.ReadFile(envFile)
+	if err != nil {
+		return env.SCION{}, err
+	}
+	var e env.SCION
+	if err := json.Unmarshal(raw, &e); err != nil {
+		return env.SCION{}, err
+	}
+	return e, nil
 }

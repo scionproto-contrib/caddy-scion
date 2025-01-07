@@ -1,5 +1,5 @@
 # Variables
-BINARY_NAMES=scion-caddy scion-caddy-forward scion-caddy-reverse
+BINARY_NAMES=scion-caddy scion-caddy-forward scion-caddy-reverse scion-caddy-native
 SRC_DIR=./cmd
 BUILD_DIR=./build
 

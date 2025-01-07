@@ -11,7 +11,7 @@
             "servers": {
                 "scionlab": {
                     "listen": [
-                        "scion/:443"
+                        "scion+single-stream/[1-ff00:0:112,127.0.0.1]:443"
                     ],
                     "routes": [
                         {
@@ -32,53 +32,6 @@
                                         {
                                             "dial": [
                                                 "scionlab.org:443"
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "match": [
-                                {
-                                    "tls": {
-                                        "sni": [
-                                            "scion-architecture.net",
-                                            "www.scion-architecture.net"
-                                        ]
-                                    }
-                                }
-                            ],
-                            "handle": [
-                                {
-                                    "handler": "proxy",
-                                    "upstreams": [
-                                        {
-                                            "dial": [
-                                                "scion-architecture.net:443"
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "match": [
-                                {
-                                    "tls": {
-                                        "sni": [
-                                            "netsec.ethz.ch"
-                                        ]
-                                    }
-                                }
-                            ],
-                            "handle": [
-                                {
-                                    "handler": "proxy",
-                                    "upstreams": [
-                                        {
-                                            "dial": [
-                                                "netsec.ethz.ch:443"
                                             ]
                                         }
                                     ]

@@ -21,6 +21,8 @@ import (
 
 	_ "github.com/scionproto-contrib/caddy-scion/forward"
 	_ "github.com/scionproto-contrib/caddy-scion/reverse"
+	_ "github.com/scionproto-contrib/caddy-scion/reverse/advertiser"
+	_ "github.com/scionproto-contrib/caddy-scion/reverse/detector"
 )
 
 func main() {
