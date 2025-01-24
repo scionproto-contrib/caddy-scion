@@ -18,14 +18,14 @@ import (
 	"github.com/caddyserver/caddy/v2"
 	"go.uber.org/zap"
 
+	"github.com/scionproto-contrib/http-proxy/networks"
 	"github.com/scionproto-contrib/http-proxy/networks/dummy"
-	"github.com/scionproto-contrib/http-proxy/networks/utils"
 
 	"github.com/scionproto-contrib/caddy-scion/networks/pool"
 )
 
 var (
-	dummyNetwork = dummy.NewNetwork(pool.NewUsagePool[string, utils.Reusable]())
+	dummyNetwork = dummy.NewNetwork(newUsagePoolWrapper[string, networks.Reusable]())
 )
 
 func init() {
@@ -41,4 +41,24 @@ var (
 
 func SetLogger(logger *zap.Logger) {
 	dummyNetwork.SetLogger(logger)
+}
+
+type usagePoolWrapper[K comparable, V any] struct {
+	usagePool *pool.UsagePool[K, V]
+}
+
+func newUsagePoolWrapper[K comparable, V any]() *usagePoolWrapper[K, V] {
+	return &usagePoolWrapper[K, V]{
+		usagePool: pool.NewUsagePool[K, V](),
+	}
+}
+
+func (w *usagePoolWrapper[K, V]) LoadOrNew(key K, construct func() (networks.Destructor, error)) (V, bool, error) {
+	return w.usagePool.LoadOrNew(key, func() (caddy.Destructor, error) {
+		return construct()
+	})
+}
+
+func (w *usagePoolWrapper[K, V]) Delete(key K) (bool, error) {
+	return w.usagePool.Delete(key)
 }

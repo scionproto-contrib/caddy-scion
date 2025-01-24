@@ -20,16 +20,16 @@ import (
 	"github.com/scionproto/scion/pkg/snet"
 	"go.uber.org/zap"
 
+	"github.com/scionproto-contrib/http-proxy/networks"
 	"github.com/scionproto-contrib/http-proxy/networks/dummy"
 	"github.com/scionproto-contrib/http-proxy/networks/singlestream"
-	"github.com/scionproto-contrib/http-proxy/networks/utils"
 
 	_ "github.com/scionproto-contrib/caddy-scion/networks/dummy"
 	"github.com/scionproto-contrib/caddy-scion/networks/pool"
 )
 
 var (
-	ssNetwork = singlestream.NewNetwork(pool.NewUsagePool[string, utils.Reusable]())
+	ssNetwork = singlestream.NewNetwork(newUsagePoolWrapper[string, networks.Reusable]())
 )
 
 func init() {
@@ -50,3 +50,23 @@ func SetPacketConnMetrics(metrics snet.SCIONPacketConnMetrics) {
 var (
 	_ caddy.ListenerFunc = (*singlestream.Network)(nil).Listen
 )
+
+type usagePoolWrapper[K comparable, V any] struct {
+	usagePool *pool.UsagePool[K, V]
+}
+
+func newUsagePoolWrapper[K comparable, V any]() *usagePoolWrapper[K, V] {
+	return &usagePoolWrapper[K, V]{
+		usagePool: pool.NewUsagePool[K, V](),
+	}
+}
+
+func (w *usagePoolWrapper[K, V]) LoadOrNew(key K, construct func() (networks.Destructor, error)) (V, bool, error) {
+	return w.usagePool.LoadOrNew(key, func() (caddy.Destructor, error) {
+		return construct()
+	})
+}
+
+func (w *usagePoolWrapper[K, V]) Delete(key K) (bool, error) {
+	return w.usagePool.Delete(key)
+}

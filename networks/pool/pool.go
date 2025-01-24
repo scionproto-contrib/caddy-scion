@@ -16,8 +16,6 @@ package pool
 
 import (
 	"github.com/caddyserver/caddy/v2"
-
-	"github.com/scionproto-contrib/http-proxy/networks/utils"
 )
 
 // UsagePool is a type safe caddy.UsagePool
@@ -31,7 +29,7 @@ func NewUsagePool[K comparable, V any]() *UsagePool[K, V] {
 	}
 }
 
-func (p *UsagePool[K, V]) LoadOrNew(key K, construct func() (utils.Destructor, error)) (V, bool, error) {
+func (p *UsagePool[K, V]) LoadOrNew(key K, construct func() (caddy.Destructor, error)) (V, bool, error) {
 	v, l, err := p.pool.LoadOrNew(key, func() (caddy.Destructor, error) {
 		d, err := construct()
 		if err != nil {
