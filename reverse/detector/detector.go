@@ -19,7 +19,7 @@ import (
 
 	"github.com/caddyserver/caddy/v2"
 	"github.com/caddyserver/caddy/v2/modules/caddyhttp"
-	"github.com/scionproto-contrib/http-proxy/reverse"
+	"github.com/scionproto-contrib/http-proxy/detector"
 	"go.uber.org/zap"
 )
 
@@ -35,7 +35,7 @@ func init() {
 
 type SCIONDetectorHandler struct {
 	logger   *zap.Logger
-	detector *reverse.Detector
+	detector *detector.Detector
 }
 
 // CaddyModule returns the Caddy module information.
@@ -48,7 +48,7 @@ func (SCIONDetectorHandler) CaddyModule() caddy.ModuleInfo {
 
 func (s *SCIONDetectorHandler) Provision(ctx caddy.Context) error {
 	s.logger = ctx.Logger()
-	s.detector = reverse.NewDetector(s.logger)
+	s.detector = detector.NewDetector(s.logger)
 	return nil
 }
 

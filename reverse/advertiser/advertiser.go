@@ -19,7 +19,7 @@ import (
 
 	"github.com/caddyserver/caddy/v2"
 	"github.com/caddyserver/caddy/v2/modules/caddyhttp"
-	"github.com/scionproto-contrib/http-proxy/reverse"
+	"github.com/scionproto-contrib/http-proxy/advertiser"
 	"go.uber.org/zap"
 )
 
@@ -36,7 +36,7 @@ func init() {
 type SCIONAdvertiserHandler struct {
 	StrictScion string `json:"Strict-SCION,omitempty"`
 	logger      *zap.Logger
-	advertiser  *reverse.Advertiser
+	advertiser  *advertiser.Advertiser
 }
 
 // CaddyModule returns the Caddy module information.
@@ -49,7 +49,7 @@ func (SCIONAdvertiserHandler) CaddyModule() caddy.ModuleInfo {
 
 func (s *SCIONAdvertiserHandler) Provision(ctx caddy.Context) error {
 	logger := ctx.Logger()
-	s.advertiser = reverse.NewAdvertiser(logger, s.StrictScion)
+	s.advertiser = advertiser.NewAdvertiser(logger, s.StrictScion)
 	return nil
 }
 
