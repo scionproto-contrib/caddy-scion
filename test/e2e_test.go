@@ -45,6 +45,7 @@ import (
 
 	caddyscion "github.com/scionproto-contrib/caddy-scion/forward"
 	_ "github.com/scionproto-contrib/caddy-scion/reverse"
+	_ "github.com/scionproto-contrib/caddy-scion/reverse/detector"
 )
 
 var (
