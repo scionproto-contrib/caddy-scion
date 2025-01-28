@@ -1,10 +1,14 @@
 # Caddy-SCION pluggins
 
-This repository contains the caddy wrapping code around the [SCION HTTP proxy](https://github.com/scionproto-contrib/http-proxy) implementation.
+[SCION](https://docs.scion.org/en/latest/) plugins for [caddy](https://caddyserver.com/) webserver.
+
+This includes:
+- A native SCION listener.
+- A wrapper for the [SCION HTTP Proxy](https://github.com/scionproto-contrib/http-proxy) implementation.
 
 ## User/admin setup
 
-If you are looking for installing and configuring the SCION-HTTP proxy as an user or network administrator, please refer to the [HTTP Proxy Documentation](https://scion-http-proxy.readthedocs.io/en/latest/index.html)
+If you are looking for installing and configuring the SCION-HTTP proxy as an user or network administrator, please refer to the [HTTP Proxy Documentation](https://scion-http-proxy.readthedocs.io/en/latest/index.html).
 
 ## Developer setup
 
@@ -39,3 +43,4 @@ go test \
   -run .\* github.com/scionproto-contrib/http-proxy/test \
   -sciond-address 127.0.0.1:30255
 ```
+Additionally, if you do not have your SCION environment configuration on the default path, please specify it setting the `SCION_ENV_FILE` environment variable.
