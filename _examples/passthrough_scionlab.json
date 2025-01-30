@@ -9,7 +9,7 @@
         "scion": {},
         "layer4": {
             "servers": {
-                "scionlab": {
+                "scion": {
                     "listen": [
                         "scion+single-stream/[1-ff00:0:112,127.0.0.1]:443"
                     ],
