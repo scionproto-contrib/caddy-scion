@@ -7,7 +7,7 @@ toolchain go1.22.10
 require (
 	github.com/caddyserver/caddy/v2 v2.9.0-beta.3
 	github.com/mholt/caddy-l4 v0.0.0-20240628163618-ca3e2f38f6e5
-	github.com/netsec-ethz/scion-apps v0.5.1-0.20241007105241-3f7a7dd6e9c0
+	github.com/netsec-ethz/scion-apps v0.5.1-0.20250203095105-f70181af6440
 	github.com/scionproto-contrib/http-proxy v0.0.0-20241129123532-4b72b92bf106
 	github.com/scionproto/scion v0.12.1-0.20241223103250-0b42cbc42486
 	go.uber.org/zap v1.27.0
@@ -183,7 +183,5 @@ require (
 	modernc.org/strutil v1.2.0 // indirect
 	modernc.org/token v1.1.0 // indirect
 )
-
-replace github.com/netsec-ethz/scion-apps => ../scion-apps
 
 replace github.com/scionproto-contrib/http-proxy => ../http-proxy
