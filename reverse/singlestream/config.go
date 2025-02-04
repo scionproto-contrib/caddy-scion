@@ -1,4 +1,4 @@
-// Copyright 2024 Anapaya Systems
+// Copyright 2024 Anapaya Systems, ETH Zurich
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,41 +12,37 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package scion
+package singlestream
 
 import (
-	"net"
-
 	"github.com/caddyserver/caddy/v2"
-	"github.com/caddyserver/caddy/v2/modules/caddyhttp"
-	"go.uber.org/zap"
+	snetmetrics "github.com/scionproto/scion/pkg/snet/metrics"
+
+	"github.com/scionproto-contrib/caddy-scion/networks/dummy"
+	"github.com/scionproto-contrib/caddy-scion/networks/singlestream"
 )
 
 var (
 	// Interface guards
-	_ caddy.Provisioner  = (*SCION)(nil)
-	_ caddy.Module       = (*SCION)(nil)
-	_ caddy.ListenerFunc = (*Network)(nil).Listen
+	_ caddy.Module      = (*SCION)(nil)
+	_ caddy.Provisioner = (*SCION)(nil)
+	_ caddy.App         = (*SCION)(nil)
+)
 
-	_ net.Listener   = (*blockedListener)(nil)
-	_ net.PacketConn = (*conn)(nil)
+var (
+	metrics = snetmetrics.NewSCIONPacketConnMetrics()
 )
 
 func init() {
-	globalNetwork.logger.Store(zap.NewNop())
-
-	caddy.RegisterModule(SCION{Network: &globalNetwork})
-	caddy.RegisterNetwork("scion", globalNetwork.ListenBlocked)
-	caddy.RegisterNetwork("scion+quic", globalNetwork.Listen)
-	caddyhttp.RegisterNetworkHTTP3("scion", "scion+quic")
+	caddy.RegisterModule(SCION{})
 }
 
 // SCION implements a caddy module. Currently, it is used to initialize the
 // logger for the global network. In the future, additional configuration can be
 // parsed with this component.
-type SCION struct {
-	Network *Network
-}
+//
+// Has to be configured as Caddy app to be executed.
+type SCION struct{}
 
 func (SCION) CaddyModule() caddy.ModuleInfo {
 	return caddy.ModuleInfo{
@@ -58,6 +54,18 @@ func (SCION) CaddyModule() caddy.ModuleInfo {
 }
 
 func (s *SCION) Provision(ctx caddy.Context) error {
-	s.Network.SetLogger(ctx.Logger(s))
+	dummy.SetLogger(ctx.Logger())
+	singlestream.SetLogger(ctx.Logger())
+	singlestream.SetPacketConnMetrics(metrics)
+	return nil
+}
+
+func (s *SCION) Start() error {
+	// no-op
+	return nil
+}
+
+func (s *SCION) Stop() error {
+	// no-op
 	return nil
 }

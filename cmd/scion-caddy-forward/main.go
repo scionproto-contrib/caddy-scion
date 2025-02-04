@@ -17,12 +17,8 @@ package main
 import (
 	caddycmd "github.com/caddyserver/caddy/v2/cmd"
 	_ "github.com/caddyserver/caddy/v2/modules/standard"
-	_ "github.com/mholt/caddy-l4"
 
 	_ "github.com/scionproto-contrib/caddy-scion/forward"
-	_ "github.com/scionproto-contrib/caddy-scion/reverse"
-	_ "github.com/scionproto-contrib/caddy-scion/reverse/advertiser"
-	_ "github.com/scionproto-contrib/caddy-scion/reverse/detector"
 )
 
 func main() {

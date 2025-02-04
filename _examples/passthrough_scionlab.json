@@ -1,0 +1,53 @@
+{
+    "admin": {
+        "disabled": true,
+        "config": {
+            "persist": false
+        }
+    },
+    "apps": {
+        "scion": {},
+        "layer4": {
+            "servers": {
+                "scion": {
+                    "listen": [
+                        "scion+single-stream/[1-ff00:0:112,127.0.0.1]:443"
+                    ],
+                    "routes": [
+                        {
+                            "match": [
+                                {
+                                    "tls": {
+                                        "sni": [
+                                            "scionlab.org",
+                                            "www.scionlab.org"
+                                        ]
+                                    }
+                                }
+                            ],
+                            "handle": [
+                                {
+                                    "handler": "proxy",
+                                    "upstreams": [
+                                        {
+                                            "dial": [
+                                                "scionlab.org:443"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "logging": {
+        "logs": {
+            "default": {
+                "level": "DEBUG"
+            }
+        }
+    }
+}

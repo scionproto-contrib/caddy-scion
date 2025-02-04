@@ -1,4 +1,4 @@
-// Copyright 2024 Anapaya Systems
+// Copyright 2024 Anapaya Systems, ETH Zurich
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package scion
+package pool
 
-import "github.com/caddyserver/caddy/v2"
+import (
+	"github.com/caddyserver/caddy/v2"
+)
 
 // UsagePool is a type safe caddy.UsagePool
 type UsagePool[K comparable, V any] struct {
@@ -27,8 +29,14 @@ func NewUsagePool[K comparable, V any]() *UsagePool[K, V] {
 	}
 }
 
-func (p *UsagePool[K, V]) LoadOrNew(key K, construct caddy.Constructor) (V, bool, error) {
-	v, l, err := p.pool.LoadOrNew(key, construct)
+func (p *UsagePool[K, V]) LoadOrNew(key K, construct func() (caddy.Destructor, error)) (V, bool, error) {
+	v, l, err := p.pool.LoadOrNew(key, func() (caddy.Destructor, error) {
+		d, err := construct()
+		if err != nil {
+			return nil, err
+		}
+		return d, nil
+	})
 	if err != nil {
 		var zero V
 		return zero, l, err
