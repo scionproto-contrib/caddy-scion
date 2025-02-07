@@ -1,7 +1,6 @@
 {
     "admin": {
-        "disabled": false,
-        "listen": "localhost:2019",
+        "disabled": true,
         "config": {
             "persist": false
         }
@@ -27,9 +26,8 @@
                                 {
                                     "handler": "forward_proxy",
                                     "hosts": [
-                                        "localhost"
-                                    ],
-                                    "disable_purge_inactive_dialers": false
+                                        "forward-proxy.scion"
+                                    ]
                                 }
                             ]
                         }
@@ -43,14 +41,18 @@
         "pki": {
             "certificate_authorities": {
                 "local": {
-                    "install_trust": false
+                    "install_trust": false,
+                    "storage": {
+                        "module": "file_system",
+                        "root": "/usr/share/scion/caddy-scion"
+                    }
                 }
             }
         },
         "tls": {
             "certificates": {
                 "automate": [
-                    "localhost"
+                    "forward-proxy.scion"
                 ]
             },
             "automation": {
@@ -60,7 +62,11 @@
                             {
                                 "module": "internal"
                             }
-                        ]
+                        ],
+                        "storage": {
+                            "module": "file_system",
+                            "root": "/usr/share/scion/caddy-scion"
+                        }
                     }
                 ]
             }
