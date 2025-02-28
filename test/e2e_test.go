@@ -178,7 +178,7 @@ func TestMain(m *testing.M) {
 							caddy.ModuleMap{"host": json.RawMessage(hostJSON)},
 						},
 						HandlersRaw: []json.RawMessage{
-							json.RawMessage(`{"handler": "detect_scion"}`),
+							json.RawMessage(`{"handler": "scion_detector"}`),
 							handlerJSON(&reverseproxy.Handler{
 								Upstreams: reverseproxy.UpstreamPool{
 									&reverseproxy.Upstream{

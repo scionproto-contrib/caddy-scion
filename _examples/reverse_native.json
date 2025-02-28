@@ -35,7 +35,7 @@
                             ],
                             "handle": [
                                 {
-                                    "handler": "detect_scion"
+                                    "handler": "scion_detector"
                                 },
                                 {
                                     "handler": "reverse_proxy",
@@ -53,7 +53,7 @@
                                                             "handler": "copy_response_headers"
                                                         },
                                                         {
-                                                            "handler": "advertise_scion",
+                                                            "handler": "scion_advertiser",
                                                             "Strict-SCION": "17-ffaa:1:1103,192.168.56.1:7443"
                                                         },
                                                         {

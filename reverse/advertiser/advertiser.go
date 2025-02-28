@@ -42,7 +42,7 @@ type SCIONAdvertiserHandler struct {
 // CaddyModule returns the Caddy module information.
 func (SCIONAdvertiserHandler) CaddyModule() caddy.ModuleInfo {
 	return caddy.ModuleInfo{
-		ID:  "http.handlers.advertise_scion",
+		ID:  "http.handlers.scion_advertiser",
 		New: func() caddy.Module { return new(SCIONAdvertiserHandler) },
 	}
 }

@@ -41,7 +41,7 @@ type SCIONDetectorHandler struct {
 // CaddyModule returns the Caddy module information.
 func (SCIONDetectorHandler) CaddyModule() caddy.ModuleInfo {
 	return caddy.ModuleInfo{
-		ID:  "http.handlers.detect_scion",
+		ID:  "http.handlers.scion_detector",
 		New: func() caddy.Module { return new(SCIONDetectorHandler) },
 	}
 }
