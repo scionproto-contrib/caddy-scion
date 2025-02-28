@@ -95,7 +95,7 @@ type Handler struct {
 // CaddyModule returns the Caddy module information.
 func (Handler) CaddyModule() caddy.ModuleInfo {
 	return caddy.ModuleInfo{
-		ID:  "http.handlers.forward_proxy",
+		ID:  "http.handlers.scion_forward_proxy",
 		New: func() caddy.Module { return new(Handler) },
 	}
 }

@@ -24,7 +24,7 @@
                         {
                             "handle": [
                                 {
-                                    "handler": "forward_proxy",
+                                    "handler": "scion_forward_proxy",
                                     "hosts": [
                                         "forward-proxy.scion"
                                     ]
