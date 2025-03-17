@@ -33,6 +33,7 @@ const (
 	APIPathUsage   = APIPathPrefix + "/path-usage"
 	APIResolveURL  = APIPathPrefix + "/redirect"
 	APIResolveHost = APIPathPrefix + "/resolve"
+	APIHealthCheck = APIPathPrefix + "/health"
 )
 
 var (
@@ -146,6 +147,9 @@ func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request, next caddyhtt
 		case APIResolveHost:
 			log.Debug("Resolve host.")
 			err = h.coreProxy.HandleResolveHost(w, r)
+		case APIHealthCheck:
+			log.Debug("Health check.")
+			err = h.coreProxy.HandleHealthCheck(w, r)
 		default:
 			log.Debug("Ignoring non matching API path.")
 			return next.ServeHTTP(w, r)
