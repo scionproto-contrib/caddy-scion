@@ -137,19 +137,13 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		panic(err)
 	}
-	reverseIPHTTPSAddr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", *serverAddr, reverseProxyIPHTTPsPort))
+
+	reverseIPHTTPSAddr, err := net.ResolveTCPAddr("tcp", fmt.Sprintf("%s:%d", *serverAddr, reverseProxyIPHTTPsPort))
 	if err != nil {
 		panic(err)
 	}
+
 	reverseSingleStreamHTTPAddr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", *serverAddr, reverseProxySingleStreamHTTPPort))
-	if err != nil {
-		panic(err)
-	}
-	reverseSingleStreamHTTPSAddr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", *serverAddr, reverseProxySingleStreamHTTPSPort))
-	if err != nil {
-		panic(err)
-	}
-	reverseHTTP3Addr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", *serverAddr, reverseProxyHTTP3Port))
 	if err != nil {
 		panic(err)
 	}
@@ -157,9 +151,19 @@ func TestMain(m *testing.M) {
 		IA:   ia,
 		Host: reverseSingleStreamHTTPAddr,
 	}
+
+	reverseSingleStreamHTTPSAddr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", *serverAddr, reverseProxySingleStreamHTTPSPort))
+	if err != nil {
+		panic(err)
+	}
 	reverseSCIONHTTPSAddr := &snet.UDPAddr{
 		IA:   ia,
 		Host: reverseSingleStreamHTTPSAddr,
+	}
+
+	reverseHTTP3Addr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", *serverAddr, reverseProxyHTTP3Port))
+	if err != nil {
+		panic(err)
 	}
 	reverseSCIONHTTP3Addr := &snet.UDPAddr{
 		IA:   ia,
