@@ -37,6 +37,7 @@ import (
 	"github.com/caddyserver/caddy/v2/modules/caddypki"
 	"github.com/caddyserver/caddy/v2/modules/caddytls"
 	"github.com/netsec-ethz/scion-apps/pkg/pan"
+	"github.com/netsec-ethz/scion-apps/pkg/shttp3"
 	"github.com/scionproto/scion/pkg/addr"
 	"github.com/scionproto/scion/pkg/daemon"
 	"github.com/scionproto/scion/pkg/snet"
@@ -62,8 +63,10 @@ const (
 	forwardProxyHost = "localhost"
 	forwardProxyPort = 1443
 
-	reverseProxyHTTPPort  = 2080
-	reverseProxyHTTPsPort = 2443
+	reverseProxyIPHTTPsPort           = 2443
+	reverseProxySingleStreamHTTPPort  = 7080
+	reverseProxySingleStreamHTTPSPort = 7443
+	reverseProxyHTTP3Port             = 8443
 
 	targetServerHost               = "localhost"
 	targetServerPort               = 3080
@@ -80,10 +83,13 @@ func TestGetTargetViaProxy(t *testing.T) {
 		targetHost   string
 		targetPort   int
 	}{
-		{"HTTPsTargetViaHTTPsProxyOverSCION", true, true, scionHost, reverseProxyHTTPsPort},
-		{"HTTPsTargetViaHTTPsProxyOverIP", true, true, ipHost, reverseProxyHTTPsPort},
-		{"HTTPTargetViaHTTPsProxyOverSCION", true, false, scionHost, reverseProxyHTTPPort},
-		{"HTTPTargetViaHTTPsProxyOverIP", true, false, ipHost, reverseProxyHTTPPort},
+		// XXX We only test HTTPS over IP because the reverse proxy is configured to use
+		// HTTP (wihtout TLS) over SCION. So far we cannot disable TLS in more than one port.
+		// Regarding proxying via HTTP3 is not supported for the Forward proxy, because it is neither
+		// supported by browsers.
+		{"HTTPsTargetViaHTTPsProxyOverIP", true, true, ipHost, reverseProxyIPHTTPsPort},
+		{"HTTPsTargetViaHTTPsProxyOverSCION", true, true, scionHost, reverseProxySingleStreamHTTPSPort},
+		{"HTTPTargetViaHTTPsProxyOverSCION", true, false, scionHost, reverseProxySingleStreamHTTPPort},
 	}
 
 	for _, tt := range tests {
@@ -101,8 +107,9 @@ func TestGetTargetOverIP(t *testing.T) {
 		name   string
 		useTLS bool
 	}{
+		// XXX We only test HTTPS over IP because the reverse proxy is configured to use
+		// HTTP (wihtout TLS) over SCION. So far we can only disable TLS in one port.
 		{"HTTPsTargetOverIP", true},
-		{"HTTPTargetOverIP", false},
 	}
 
 	for _, tt := range tests {
@@ -110,6 +117,12 @@ func TestGetTargetOverIP(t *testing.T) {
 			testGetTargetOverIP(t, tt.useTLS)
 		})
 	}
+}
+
+func TestGetTargetOverH3SCION(t *testing.T) {
+	t.Run("HTTP3TargetOverSCION", func(t *testing.T) {
+		testGetTargetOverH3SCION(t)
+	})
 }
 
 func TestMain(m *testing.M) {
@@ -124,21 +137,37 @@ func TestMain(m *testing.M) {
 	if err != nil {
 		panic(err)
 	}
-	reverseHTTPAddr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", *serverAddr, reverseProxyHTTPPort))
+
+	reverseIPHTTPSAddr, err := net.ResolveTCPAddr("tcp", fmt.Sprintf("%s:%d", *serverAddr, reverseProxyIPHTTPsPort))
 	if err != nil {
 		panic(err)
 	}
-	reverseHTTPSAddr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", *serverAddr, reverseProxyHTTPsPort))
+
+	reverseSingleStreamHTTPAddr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", *serverAddr, reverseProxySingleStreamHTTPPort))
 	if err != nil {
 		panic(err)
 	}
 	reverseSCIONHTTPAddr := &snet.UDPAddr{
 		IA:   ia,
-		Host: reverseHTTPAddr,
+		Host: reverseSingleStreamHTTPAddr,
+	}
+
+	reverseSingleStreamHTTPSAddr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", *serverAddr, reverseProxySingleStreamHTTPSPort))
+	if err != nil {
+		panic(err)
 	}
 	reverseSCIONHTTPSAddr := &snet.UDPAddr{
 		IA:   ia,
-		Host: reverseHTTPSAddr,
+		Host: reverseSingleStreamHTTPSAddr,
+	}
+
+	reverseHTTP3Addr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", *serverAddr, reverseProxyHTTP3Port))
+	if err != nil {
+		panic(err)
+	}
+	reverseSCIONHTTP3Addr := &snet.UDPAddr{
+		IA:   ia,
+		Host: reverseHTTP3Addr,
 	}
 
 	handlerJSON := func(h caddyhttp.MiddlewareHandler) json.RawMessage {
@@ -151,8 +180,10 @@ func TestMain(m *testing.M) {
 	}
 
 	httpApp := caddyhttp.App{
-		HTTPPort:  reverseProxyHTTPPort,
-		HTTPSPort: reverseProxyHTTPsPort,
+		// XXX: This is the only way to disable TLS for the listeners by config.
+		// We set here the SingleStream SCION port to test the reverse proxy over SCION without TLS.
+		HTTPPort:  reverseProxySingleStreamHTTPPort,
+		HTTPSPort: reverseProxySingleStreamHTTPSPort,
 		Servers: map[string]*caddyhttp.Server{
 			"forward": {
 				Listen: []string{fmt.Sprintf(":%d", forwardProxyPort)},
@@ -167,10 +198,10 @@ func TestMain(m *testing.M) {
 			},
 			"reverse": {
 				Listen: []string{
-					reverseHTTPAddr.String(),
-					reverseHTTPSAddr.String(),
+					reverseIPHTTPSAddr.String(),
 					fmt.Sprintf("scion+single-stream/%s", reverseSCIONHTTPAddr.String()),
 					fmt.Sprintf("scion+single-stream/%s", reverseSCIONHTTPSAddr.String()),
+					fmt.Sprintf("scion/%s", reverseSCIONHTTP3Addr.String()),
 				},
 				Routes: caddyhttp.RouteList{
 					caddyhttp.Route{
@@ -189,9 +220,7 @@ func TestMain(m *testing.M) {
 						},
 					},
 				},
-				// We disable HTTP/3 over IP for the reverse proxy server because it will clash with the scion listener
-				// In any case we are not using HTTP/3 in this test.
-				Protocols: []string{"h1", "h2"},
+				Protocols: []string{"h1", "h2", "h3"},
 			},
 			"dummy": {
 				Listen: []string{fmt.Sprintf(":%d", targetServerPort)},
@@ -283,12 +312,11 @@ func TestMain(m *testing.M) {
 }
 
 func testGetTargetOverIP(t *testing.T, useTLS bool) {
-	scheme := "http"
-	port := reverseProxyHTTPPort
-	if useTLS {
-		scheme = "https"
-		port = reverseProxyHTTPsPort
+	if !useTLS {
+		panic("HTTP over IP is not supported")
 	}
+	scheme := "https"
+	port := reverseProxyIPHTTPsPort
 
 	client := &http.Client{
 		Transport: &http.Transport{
@@ -302,6 +330,27 @@ func testGetTargetOverIP(t *testing.T, useTLS bool) {
 	resp, err := client.Get(url)
 	if err != nil {
 		t.Fatalf("Failed to get target over IP: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if err := responseExpected(resp, targetServerResponseStatusCode, targetServerResponseBody); err != nil {
+		t.Fatalf("Unexpected response: %v", err)
+	}
+}
+
+func testGetTargetOverH3SCION(t *testing.T) {
+	roundTripper := shttp3.DefaultTransport
+	roundTripper.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	defer roundTripper.Close()
+
+	client := &http.Client{
+		Transport: roundTripper,
+	}
+
+	url := fmt.Sprintf("%s://%s:%d", "https", scionHost, reverseProxyHTTP3Port)
+	resp, err := client.Get(url)
+	if err != nil {
+		t.Fatalf("Failed to get target over H3/SCION: %v", err)
 	}
 	defer resp.Body.Close()
 
