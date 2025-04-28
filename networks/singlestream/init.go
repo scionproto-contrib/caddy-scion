@@ -16,12 +16,10 @@ package singlestream
 
 import (
 	"github.com/caddyserver/caddy/v2"
-	"github.com/caddyserver/caddy/v2/modules/caddyhttp"
 	"github.com/scionproto/scion/pkg/snet"
 	"go.uber.org/zap"
 
 	"github.com/scionproto-contrib/http-proxy/networks"
-	"github.com/scionproto-contrib/http-proxy/networks/dummy"
 	"github.com/scionproto-contrib/http-proxy/networks/singlestream"
 
 	_ "github.com/scionproto-contrib/caddy-scion/networks/dummy"
@@ -35,7 +33,6 @@ var (
 func init() {
 	ssNetwork.SetNopLogger()
 	caddy.RegisterNetwork(singlestream.SCIONSingleStream, ssNetwork.Listen) // used for HTTP1.1/2 over QUIC/UDP/SCION
-	caddyhttp.RegisterNetworkHTTP3(singlestream.SCIONSingleStream, dummy.SCIONDummy)
 }
 
 func SetLogger(logger *zap.Logger) {
