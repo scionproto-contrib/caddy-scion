@@ -53,6 +53,7 @@
         "tls": {
             "certificates": {
                 "automate": [
+                    "localhost",
                     "forward-proxy.scion"
                 ]
             },

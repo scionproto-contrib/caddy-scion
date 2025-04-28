@@ -68,7 +68,7 @@
                             ]
                         }
                     ],
-                    "Protocols": ["h1", "h2","h3"]
+                    "Protocols": ["h3"]
                 }
             }
         },
