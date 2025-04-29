@@ -22,7 +22,6 @@ import (
 	"github.com/scionproto-contrib/http-proxy/networks"
 	"github.com/scionproto-contrib/http-proxy/networks/singlestream"
 
-	_ "github.com/scionproto-contrib/caddy-scion/networks/dummy"
 	"github.com/scionproto-contrib/caddy-scion/networks/pool"
 )
 
