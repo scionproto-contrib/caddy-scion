@@ -8,7 +8,7 @@ require (
 	github.com/caddyserver/caddy/v2 v2.9.0-beta.3
 	github.com/mholt/caddy-l4 v0.0.0-20240628163618-ca3e2f38f6e5
 	github.com/netsec-ethz/scion-apps v0.5.1-0.20250203095105-f70181af6440
-	github.com/scionproto-contrib/http-proxy v0.2.1-beta.1
+	github.com/scionproto-contrib/http-proxy v0.0.0-20250429151239-14abf6c18ab5
 	github.com/scionproto/scion v0.12.1-0.20241223103250-0b42cbc42486
 	go.uber.org/zap v1.27.0
 )

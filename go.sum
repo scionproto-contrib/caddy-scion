@@ -471,8 +471,8 @@ github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQD
 github.com/satori/go.uuid v1.2.0/go.mod h1:dA0hQrYB0VpLJoorglMZABFdXlWrHn1NEOzdhQKdks0=
 github.com/schollz/jsonstore v1.1.0 h1:WZBDjgezFS34CHI+myb4s8GGpir3UMpy7vWoCeO0n6E=
 github.com/schollz/jsonstore v1.1.0/go.mod h1:15c6+9guw8vDRyozGjN3FoILt0wpruJk9Pi66vjaZfg=
-github.com/scionproto-contrib/http-proxy v0.2.1-beta.1 h1:V6uWYLan23nOf5DixUP43cpmx+KiFiolUzdSjqkDFoc=
-github.com/scionproto-contrib/http-proxy v0.2.1-beta.1/go.mod h1:fxuXoCOIYWN/7ajNEUCezyQXKyVjbC0ILMgqFhXWfLg=
+github.com/scionproto-contrib/http-proxy v0.0.0-20250429151239-14abf6c18ab5 h1:/nKbnp90gUY1OcczJ6KIklVQ1bq/Athb94MnZafa6zc=
+github.com/scionproto-contrib/http-proxy v0.0.0-20250429151239-14abf6c18ab5/go.mod h1:fxuXoCOIYWN/7ajNEUCezyQXKyVjbC0ILMgqFhXWfLg=
 github.com/scionproto/scion v0.12.1-0.20241223103250-0b42cbc42486 h1:7hYIHKVxnrrvRvlHYX7cskTvXHCdb6HfFMYyzpZCPmk=
 github.com/scionproto/scion v0.12.1-0.20241223103250-0b42cbc42486/go.mod h1:ZZdYvTNhrC3USJOP7XcMFFrwbyoYLGvTKb1L3aIzpxM=
 github.com/sergi/go-diff v1.0.0/go.mod h1:0CfEIISq7TuYL3j771MWULgwwjU+GofnZX9QAmXWZgo=
