@@ -18,7 +18,6 @@ import (
 	"github.com/caddyserver/caddy/v2"
 	snetmetrics "github.com/scionproto/scion/pkg/snet/metrics"
 
-	"github.com/scionproto-contrib/caddy-scion/networks/dummy"
 	"github.com/scionproto-contrib/caddy-scion/networks/singlestream"
 )
 
@@ -54,7 +53,6 @@ func (SCION) CaddyModule() caddy.ModuleInfo {
 }
 
 func (s *SCION) Provision(ctx caddy.Context) error {
-	dummy.SetLogger(ctx.Logger())
 	singlestream.SetLogger(ctx.Logger())
 	singlestream.SetPacketConnMetrics(metrics)
 	return nil

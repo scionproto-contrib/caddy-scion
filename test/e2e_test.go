@@ -220,7 +220,12 @@ func TestMain(m *testing.M) {
 						},
 					},
 				},
-				Protocols: []string{"h1", "h2", "h3"},
+				ListenProtocols: [][]string{
+					{"h1", "h2", "h3"},
+					{"h1", "h2"},
+					{"h1", "h2"},
+					{"h3"},
+				},
 			},
 			"dummy": {
 				Listen: []string{fmt.Sprintf(":%d", targetServerPort)},
