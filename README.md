@@ -1,6 +1,6 @@
-# Caddy-SCION pluggins
+# Caddy-SCION plugins
 
-[SCION](https://docs.scion.org/en/latest/) plugins for [caddy](https://caddyserver.com/) webserver.
+[SCION](https://docs.scion.org/en/latest/) plugins for the [Caddy](https://caddyserver.com/) web server.
 
 This includes:
 - A native SCION listener.
@@ -8,7 +8,7 @@ This includes:
 
 ## User/admin setup
 
-If you are looking for installing and configuring the SCION-HTTP proxy as an user or network administrator, please refer to the [HTTP Proxy Documentation](https://scion-http-proxy.readthedocs.io/en/latest/index.html).
+If you are looking for installing and configuring the SCION-HTTP proxy as a user or network administrator, please refer to the [HTTP Proxy Documentation](https://scion-http-proxy.readthedocs.io/en/latest/index.html).
 
 ## Developer setup
 
@@ -16,31 +16,48 @@ If you are looking for setting up a developer environment, you can directly refe
 
 ## E2E tests
 
-Only runnable on a SCION enabled host. Additionally the add an entry to `/etc/hosts` of the form:
+You can run the E2E test as long as a SCION daemon is enabled for both the client and the server (which may even be the same daemon within the same AS).
+In practice this means that you can run the E2E test on a SCION enabled endhost or using the [test environment](https://docs.scion.org/en/latest/dev/run.html).
+Additionally, add an entry to `/etc/hosts` of the form:
  ```
- <local ISD-AS>,[<IP address use to reach SCION services>] scion.local
+ <target ISD-AS>,[<IP address used to reach SCION services>] scion.local
  ```
-Where the ` <local ISD-AS>` is the ISD-AS number the host is running on. (one can verify it in the `topology.json` by default this is located under `/etc/scion`) and `<IP address use to reach SCION services>` is the local address that your host uses to reach the SCION services, i.e. SCION border router and SCION Control service. You can find out this addres by inspecting the `etc/scion/topology.json` file:
+Where the `<target ISD-AS>` is the ISD-AS number the server is running on and `<IP address used to reach SCION services>` is the local address that your host uses to reach the SCION services, i.e. SCION border router and SCION Control service. 
+
+On a SCION enabled endhost, you can find out this address by inspecting the `etc/scion/topology.json` file:
 ```
 "control_service": {
-    "cs-1": {
-      "addr": "<IP address use to reach SCION services>"
-    },
+  "cs-1": {
+    "addr": "<IP address used to reach SCION services>"
+  },
   }
 ```
 and then issuing:
 ```
-$ sudo ip route get <IP address use to reach SCION services>
+$ sudo ip route get <IP address used to reach SCION services>
 ```
+On the local [development test environment](https://docs.scion.org/en/latest/dev/run.html), one can use `127.0.0.1`.
 
-If your SCION daemon is not listening on the default address i.e. `127.0.0.1:30255`, provide the actual address as a flag to the test.
+To run the test, issue the following command, indicating the `environment.json` for your setup (used for the server):
 
 ```bash
-go test \
+SCION_ENV_FILE="/tmp/environment.json" go test \
   -timeout 30s \
   -tags=e2e \
   -v \
-  -run .\* github.com/scionproto-contrib/http-proxy/test \
+  -run .\* github.com/scionproto-contrib/caddy-scion/test \
   -sciond-address 127.0.0.1:30255
 ```
-Additionally, if you do not have your SCION environment configuration on the default path, please specify it setting the `SCION_ENV_FILE` environment variable.
+Additionally, if you do not have your SCION environment configuration on the default path, please specify it by setting the `SCION_ENV_FILE` environment variable. Note that for this test we only expect **one** AS to be indicated for the server, the format may be similar to:
+
+```
+{
+  "ases": {
+    "1-ff00:0:112": {
+       "<target ISD-AS>": "<SCIOND-IP:SCIOND-PORT>"
+    }
+  }
+}
+```
+
+Also modify the `-sciond-address` to point to the SCION Daemon that the client will use.
