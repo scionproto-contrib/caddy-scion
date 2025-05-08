@@ -36,7 +36,6 @@ import (
 	"github.com/caddyserver/caddy/v2/modules/caddyhttp/reverseproxy"
 	"github.com/caddyserver/caddy/v2/modules/caddypki"
 	"github.com/caddyserver/caddy/v2/modules/caddytls"
-	"github.com/netsec-ethz/scion-apps/pkg/pan"
 	"github.com/netsec-ethz/scion-apps/pkg/shttp3"
 	"github.com/scionproto/scion/pkg/addr"
 	"github.com/scionproto/scion/pkg/daemon"
@@ -128,10 +127,10 @@ func TestGetTargetOverH3SCION(t *testing.T) {
 func TestMain(m *testing.M) {
 	flag.Parse()
 	// Check for forward proxy
-	// err := checkScionConfiguration(*sciondAddr)
-	// if err != nil {
-	// 	panic(err)
-	// }
+	err := checkScionConfiguration(*sciondAddr)
+	if err != nil {
+		panic(err)
+	}
 	// Check for reverse proxy
 	ia, err := iaFromEnvironment()
 	if err != nil {
@@ -450,15 +449,13 @@ func responseExpected(resp *http.Response, expectedStatusCode int, expectedRespo
 }
 
 func checkScionConfiguration(daemonAddr string) error {
-	// all pan library components should use this address as well
 	if daemonAddr != "" {
 		os.Setenv("SCION_DAEMON_ADDRESS", daemonAddr)
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second) // keep tests fast
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
-	// check if we are on a scion enabled host
 	sciond, err := findSciond(ctx)
 	if err != nil {
 		return err
@@ -469,14 +466,7 @@ func checkScionConfiguration(daemonAddr string) error {
 		return err
 	}
 
-	addr, err := pan.ResolveUDPAddr(ctx, scionHost+":0") // dummy port
-	if err != nil {
-		return err
-	}
-
-	if ia.String() != addr.IA.String() {
-		return fmt.Errorf("E2E is misconfigured\n\ttest target host '%s' must point to the same IA as the scion daemon\n\tgot %s, want %s\n\t(add '%s,[127.0.0.1] %s' to /etc/hosts)", scionHost, addr.IA, ia, ia, scionHost)
-	}
+	fmt.Printf("Client SCIOND found at %s, local IA: %s\n", daemonAddr, ia)
 
 	return nil
 }
@@ -514,6 +504,7 @@ func iaFromEnvironment() (addr.IA, error) {
 	if err := checkSciond(ctx, as); err != nil {
 		return addr.IA(0), fmt.Errorf("unable to connect to AS %s SCIOND at %s: %w", ia, as.DaemonAddress, err)
 	}
+	fmt.Printf("Server SCIOND found at %s, local IA: %s\n", as.DaemonAddress, ia)
 	return ia, nil
 }
 
