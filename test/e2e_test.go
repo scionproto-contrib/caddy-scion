@@ -345,6 +345,12 @@ func testGetTargetOverIP(t *testing.T, useTLS bool) {
 func testGetTargetOverH3SCION(t *testing.T) {
 	roundTripper := shttp3.DefaultTransport
 	roundTripper.TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+	// XXX(JordiSubira): We cannot add the SCION quic version because the roundTripper tries to
+	// overwrite the tls.NextProtos with the quic-version https://github.com/Anapaya/quic-go/blob/release/v0.49.0/http3/transport.go#L325
+	//
+	// roundTripper.QUICConfig = &quic.Config{
+	// 	Versions: []quic.Version{0x5c10000f},
+	// }
 	defer roundTripper.Close()
 
 	client := &http.Client{
