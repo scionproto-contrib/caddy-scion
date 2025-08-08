@@ -1,14 +1,14 @@
 module github.com/scionproto-contrib/caddy-scion
 
-go 1.22.7
+go 1.23
 
-toolchain go1.22.10
+toolchain go1.23.11
 
 require (
 	github.com/caddyserver/caddy/v2 v2.9.0-beta.3
 	github.com/mholt/caddy-l4 v0.0.0-20240628163618-ca3e2f38f6e5
 	github.com/netsec-ethz/scion-apps v0.5.1-0.20250203095105-f70181af6440
-	github.com/scionproto-contrib/http-proxy v0.0.0-20250429151239-14abf6c18ab5
+	github.com/scionproto-contrib/http-proxy v0.0.0-20250807143328-dc6fed80cec4
 	github.com/scionproto/scion v0.12.1-0.20241223103250-0b42cbc42486
 	go.uber.org/zap v1.27.0
 )
@@ -108,7 +108,7 @@ require (
 	github.com/prometheus/common v0.53.0 // indirect
 	github.com/prometheus/procfs v0.14.0 // indirect
 	github.com/quic-go/qpack v0.5.1 // indirect
-	github.com/quic-go/quic-go v0.48.2 // indirect
+	github.com/quic-go/quic-go v0.50.1 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/rs/xid v1.5.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
@@ -154,7 +154,7 @@ require (
 	go.step.sm/linkedca v0.20.1 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/automaxprocs v1.6.0 // indirect
-	go.uber.org/mock v0.4.0 // indirect
+	go.uber.org/mock v0.5.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap/exp v0.3.0 // indirect
 	golang.org/x/crypto v0.31.0 // indirect
@@ -183,3 +183,5 @@ require (
 	modernc.org/strutil v1.2.0 // indirect
 	modernc.org/token v1.1.0 // indirect
 )
+
+replace github.com/quic-go/quic-go => github.com/Anapaya/quic-go v0.50.1-0.20250318085304-31c2831f6fe0
