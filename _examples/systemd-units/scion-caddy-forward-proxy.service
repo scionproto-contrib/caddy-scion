@@ -3,7 +3,6 @@ Description=Scion-Caddy-Forward-Proxy allows to use the browser extension to nav
 Documentation=
 After=network-online.target scion-dispatcher.service scion-daemon.service
 Wants=network-online.target scion-daemon.service scion-dispatcher.service
-PartOf=scionlab.target
 
 [Service]
 Type=simple
@@ -15,4 +14,4 @@ KillMode=control-group
 Restart=on-failure
 
 [Install]
-WantedBy=scionlab.target
+WantedBy=multi-user.target

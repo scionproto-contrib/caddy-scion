@@ -2,8 +2,7 @@
 Description=Scion-Caddy-Passthrough-Proxy makes various domains SCION-enabled
 Documentation=
 After=network-online.target scion-dispatcher.service scion-daemon.service
-Wants=network-online.target scion-dispatcher.service scion-daemon.service
-PartOf=scionlab.target
+Wants=network-online.target scion-daemon.service scion-dispatcher.service
 
 [Service]
 Type=simple
@@ -15,4 +14,4 @@ KillMode=control-group
 Restart=on-failure
 
 [Install]
-WantedBy=scionlab.target
+WantedBy=multi-user.target
