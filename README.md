@@ -60,4 +60,4 @@ Additionally, if you do not have your SCION environment configuration on the def
 }
 ```
 
-Also modify the `-sciond-address` to point to the SCION Daemon that the client will use.
+Also modify the `-sciond-address` to point to the SCION Daemon that the client will use. If not set, the value of the address defined in the `environment.json` file is used (i.e., same IA as the server).
