@@ -50,7 +50,7 @@ import (
 
 var (
 	serverAddr = flag.String("server-addr", "127.0.0.1", "local-address for forward/reverse proxy")
-	sciondAddr = flag.String("sciond-address", "127.0.0.1:30255", "address to the scion daemon")
+	sciondAddr = flag.String("sciond-address", "", "address to the client scion daemon. If not set, the value of the address defined in the environment.json file is used (i.e., same IA as the server).")
 
 	targetServerResponseBody = []byte("hello from test server")
 )
@@ -126,13 +126,15 @@ func TestGetTargetOverH3SCION(t *testing.T) {
 
 func TestMain(m *testing.M) {
 	flag.Parse()
-	// Check for forward proxy
-	err := checkScionConfiguration(*sciondAddr)
+
+	// Check for reverse proxy
+	ia, err := iaFromEnvironment()
 	if err != nil {
 		panic(err)
 	}
-	// Check for reverse proxy
-	ia, err := iaFromEnvironment()
+
+	// Check for forward proxy
+	err = checkScionConfiguration(*sciondAddr)
 	if err != nil {
 		panic(err)
 	}
