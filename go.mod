@@ -8,7 +8,7 @@ require (
 	github.com/caddyserver/caddy/v2 v2.9.0-beta.3
 	github.com/mholt/caddy-l4 v0.0.0-20240628163618-ca3e2f38f6e5
 	github.com/netsec-ethz/scion-apps v0.5.1-0.20250203095105-f70181af6440
-	github.com/scionproto-contrib/http-proxy v0.0.0-20250926111325-0340ebacaf89
+	github.com/scionproto-contrib/http-proxy v0.2.1-beta.1.0.20251010083953-5bdc593f86de
 	github.com/scionproto/scion v0.12.1-0.20241223103250-0b42cbc42486
 	go.uber.org/zap v1.27.0
 )
@@ -185,3 +185,5 @@ require (
 )
 
 replace github.com/quic-go/quic-go => github.com/Anapaya/quic-go v0.50.1-0.20250318085304-31c2831f6fe0
+
+replace github.com/caddyserver/caddy/v2 => github.com/JordiSubira/caddy/v2 v2.9.0-beta.3.0.20250428132246-ed8126f2b668

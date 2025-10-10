@@ -35,6 +35,8 @@ github.com/BurntSushi/toml v1.4.0 h1:kuoIxZQy2WRRk1pttg9asf+WVv6tWQuBNVmK8+nqPr0
 github.com/BurntSushi/toml v1.4.0/go.mod h1:ukJfTF/6rtPPRCnwkur4qwRxa8vTRFBF0uk2lLoLwho=
 github.com/HdrHistogram/hdrhistogram-go v1.1.2 h1:5IcZpTvzydCQeHzK4Ef/D5rrSqwxob0t8PQPMybUNFM=
 github.com/HdrHistogram/hdrhistogram-go v1.1.2/go.mod h1:yDgFjdqOqDEKOvasDdhWNXYg9BVp4O+o5f6V/ehm6Oo=
+github.com/JordiSubira/caddy/v2 v2.9.0-beta.3.0.20250428132246-ed8126f2b668 h1:YKVFG4bH9F78uotuzd4vEvrstQdAPGT3j20ENd/YAsw=
+github.com/JordiSubira/caddy/v2 v2.9.0-beta.3.0.20250428132246-ed8126f2b668/go.mod h1:NPph9J0QFx8jOZlgMhySks9IG/A6H/bQipcrwpFCOM0=
 github.com/Masterminds/goutils v1.1.1 h1:5nUrii3FMTL5diU80unEVvNevw1nH4+ZV4DSLVJLSYI=
 github.com/Masterminds/goutils v1.1.1/go.mod h1:8cTjp+g8YejhMuvIA5y2vz3BpJxksy863GQaJW2MFNU=
 github.com/Masterminds/semver/v3 v3.1.1/go.mod h1:VPu/7SZ7ePZ3QOrcuXROw5FAcLl4a0cBrbBpGY/8hQs=
@@ -97,8 +99,6 @@ github.com/bradfitz/go-smtpd v0.0.0-20170404230938-deb6d6237625/go.mod h1:HYsPBT
 github.com/britram/borat v0.0.0-20181011130314-f891bcfcfb9b h1:eOJHzrH26TPsYqtMlhcRV5NZKwI7iopaFbYwhd03CjA=
 github.com/britram/borat v0.0.0-20181011130314-f891bcfcfb9b/go.mod h1:iEd9IJ9SwedxB5kO5ypZMVq7PUNDW5lhQy92rbWBLGk=
 github.com/buger/jsonparser v0.0.0-20181115193947-bf1c66bbce23/go.mod h1:bbYlZJ7hK1yFx9hf58LP0zeX7UjIGs20ufpu3evjr+s=
-github.com/caddyserver/caddy/v2 v2.9.0-beta.3 h1:tlqfbJMRNY6vnWwaQrnWrgS+wkDXr9GIFUD/P+HY9vA=
-github.com/caddyserver/caddy/v2 v2.9.0-beta.3/go.mod h1:NPph9J0QFx8jOZlgMhySks9IG/A6H/bQipcrwpFCOM0=
 github.com/caddyserver/certmagic v0.21.5-0.20241105180249-4293198e094d h1:+zOduGxxC4WBAnlDf5Uf0TXbWXRqjUXkJKevDZZa79A=
 github.com/caddyserver/certmagic v0.21.5-0.20241105180249-4293198e094d/go.mod h1:swUXjQ1T9ZtMv95qj7/InJvWLXURU85r+CfG0T+ZbDE=
 github.com/caddyserver/zerossl v0.1.3 h1:onS+pxp3M8HnHpN5MMbOMyNjmTheJyWRaZYwn+YTAyA=
@@ -471,8 +471,8 @@ github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQD
 github.com/satori/go.uuid v1.2.0/go.mod h1:dA0hQrYB0VpLJoorglMZABFdXlWrHn1NEOzdhQKdks0=
 github.com/schollz/jsonstore v1.1.0 h1:WZBDjgezFS34CHI+myb4s8GGpir3UMpy7vWoCeO0n6E=
 github.com/schollz/jsonstore v1.1.0/go.mod h1:15c6+9guw8vDRyozGjN3FoILt0wpruJk9Pi66vjaZfg=
-github.com/scionproto-contrib/http-proxy v0.0.0-20250926111325-0340ebacaf89 h1:xnzKMKxmONq2s8lQpuja3a2LySZKZ9Zh9HMTncqq3ns=
-github.com/scionproto-contrib/http-proxy v0.0.0-20250926111325-0340ebacaf89/go.mod h1:YaE/C9Hi64p0GjyEOPv/56p8pNVpjudmCcLIZ9N8bcw=
+github.com/scionproto-contrib/http-proxy v0.2.1-beta.1.0.20251010083953-5bdc593f86de h1:mCR2OzEC4ppnUGp8AYwlxK+hAVlyGfnFywXQxeJdohA=
+github.com/scionproto-contrib/http-proxy v0.2.1-beta.1.0.20251010083953-5bdc593f86de/go.mod h1:YaE/C9Hi64p0GjyEOPv/56p8pNVpjudmCcLIZ9N8bcw=
 github.com/scionproto/scion v0.12.1-0.20241223103250-0b42cbc42486 h1:7hYIHKVxnrrvRvlHYX7cskTvXHCdb6HfFMYyzpZCPmk=
 github.com/scionproto/scion v0.12.1-0.20241223103250-0b42cbc42486/go.mod h1:ZZdYvTNhrC3USJOP7XcMFFrwbyoYLGvTKb1L3aIzpxM=
 github.com/sergi/go-diff v1.0.0/go.mod h1:0CfEIISq7TuYL3j771MWULgwwjU+GofnZX9QAmXWZgo=
