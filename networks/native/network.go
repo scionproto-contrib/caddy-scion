@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"net"
 	"os"
+	"strings"
 	"sync/atomic"
 	"time"
 
@@ -89,12 +90,22 @@ func (n *Network) Logger() *zap.Logger {
 func (n *Network) Listen(
 	ctx context.Context,
 	network string,
-	address string,
+	host string,
+	portRange string,
+	portOffset uint,
 	cfg net.ListenConfig,
 ) (any, error) {
 	if network != SCIONUDP {
 		return nil, fmt.Errorf("unsupported network: %s", network)
 	}
+	if strings.Contains(portRange, "-") {
+		return nil, fmt.Errorf("port ranges are not supported for SCION listeners, got: %s", portRange)
+	}
+	// PortOffset should be 0 for single ports, we fail if not.
+	if portOffset != 0 {
+		return nil, fmt.Errorf("port offsets are not supported for SCION UDP listeners")
+	}
+	address := net.JoinHostPort(host, portRange)
 	laddr, err := snet.ParseUDPAddr(address)
 	if err != nil {
 		return nil, fmt.Errorf("parsing listening address: %w", err)
@@ -102,6 +113,7 @@ func (n *Network) Listen(
 	if laddr.Host.Port == 0 {
 		return nil, fmt.Errorf("wildcard port not supported: %s", address)
 	}
+
 	key := poolKey(network, laddr.String())
 	c, loaded, err := n.Pool.LoadOrNew(key, func() (caddy.Destructor, error) {
 		return n.listener.listen(ctx, n, laddr, cfg)

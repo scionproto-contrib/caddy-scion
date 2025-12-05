@@ -15,6 +15,11 @@
 package singlestream
 
 import (
+	"context"
+	"fmt"
+	"net"
+	"strings"
+
 	"github.com/caddyserver/caddy/v2"
 	"github.com/scionproto/scion/pkg/snet"
 	"go.uber.org/zap"
@@ -31,7 +36,16 @@ var (
 
 func init() {
 	ssNetwork.SetNopLogger()
-	caddy.RegisterNetwork(singlestream.SCIONSingleStream, ssNetwork.Listen) // used for HTTP1.1/2 over QUIC/UDP/SCION
+	caddy.RegisterNetwork(singlestream.SCIONSingleStream, func(ctx context.Context, network, host, portRange string, portOffset uint, cfg net.ListenConfig) (any, error) {
+		if strings.Contains(portRange, "-") {
+			return nil, fmt.Errorf("port ranges are not supported for SCION listeners, got: %s", portRange)
+		}
+		// PortOffset should be 0 for single ports, we fail if not.
+		if portOffset != 0 {
+			return nil, fmt.Errorf("port offsets are not supported for SCION UDP listeners")
+		}
+		return ssNetwork.Listen(ctx, network, net.JoinHostPort(host, portRange), cfg)
+	}) // used for HTTP1.1/2 over QUIC/UDP/SCION
 }
 
 func SetLogger(logger *zap.Logger) {
@@ -41,11 +55,6 @@ func SetLogger(logger *zap.Logger) {
 func SetPacketConnMetrics(metrics snet.SCIONPacketConnMetrics) {
 	ssNetwork.SetPacketConnMetrics(metrics)
 }
-
-// Interface guards
-var (
-	_ caddy.ListenerFunc = (*singlestream.Network)(nil).Listen
-)
 
 type usagePoolWrapper[K comparable, V any] struct {
 	*pool.UsagePool[K, V]
