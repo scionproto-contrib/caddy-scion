@@ -55,6 +55,11 @@ $(BINARY_NAMES):
 	@mkdir -p $(BUILD_DIR)
 	$(GOBUILD) -o $(BUILD_DIR)/$@ $(SRC_DIR)/$@
 
+# Build scion-caddy-forward with acmedns module
+scion-caddy-forward-acmedns:
+	@mkdir -p $(BUILD_DIR)
+	$(GOBUILD) -tags=acmedns -o $(BUILD_DIR)/$@ $(SRC_DIR)/scion-caddy-forward
+
 # Helper function to build releases for given platforms
 # Usage: $(MAKE) build-for-platforms PLATFORMS="linux-amd64 darwin-amd64"
 build-for-platforms:
@@ -81,6 +86,22 @@ build-for-platforms:
 				$(RELEASE_FLAGS) GOOS=$$os GOARCH=$$arch $(GOBUILD) -o $$output $(SRC_DIR)/$$binary || exit 1; \
 			fi; \
 		done; \
+	done
+	@for platform in $(PLATFORMS); do \
+		os=$${platform%%-*}; \
+		arch=$${platform#*-}; \
+		arch_name=$$arch; \
+		if [ "$$arch" = "amd64" ]; then arch_name="x86_64"; fi; \
+		ext=""; \
+		if [ "$$os" = "windows" ]; then ext=".exe"; fi; \
+		output="$(BUILD_DIR)/scion-caddy-forward-acmedns_"; \
+		if [ "$$os" = "windows" ]; then \
+			output="$${output}$${arch_name}$${ext}"; \
+		else \
+			output="$${output}$${os}_$${arch_name}"; \
+		fi; \
+		echo "Building scion-caddy-forward-acmedns for $$os/$$arch..."; \
+		$(RELEASE_FLAGS) GOOS=$$os GOARCH=$$arch $(GOBUILD) -tags=acmedns -o $$output $(SRC_DIR)/scion-caddy-forward || exit 1; \
 	done
 
 # Build releases for all platforms
@@ -116,4 +137,4 @@ clean:
 vet:
 	$(GOVET) ./...
 
-.PHONY: all fmt lint test test-e2e test-integration build clean vet $(BINARY_NAMES) build-for-platforms build-releases build-linux build-macos build-windows
+.PHONY: all fmt lint test test-e2e test-integration build clean vet $(BINARY_NAMES) scion-caddy-forward-acmedns build-for-platforms build-releases build-linux build-macos build-windows
