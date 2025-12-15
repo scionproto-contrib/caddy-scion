@@ -3,6 +3,7 @@ module github.com/scionproto-contrib/caddy-scion
 go 1.25
 
 require (
+	github.com/caddy-dns/acmedns v0.6.0
 	github.com/caddyserver/caddy/v2 v2.10.1
 	github.com/mholt/caddy-l4 v0.0.0-20240628163618-ca3e2f38f6e5
 	github.com/netsec-ethz/scion-apps v0.6.1-0.20251205083251-f2efcdffa5cb
@@ -83,7 +84,8 @@ require (
 	github.com/jackc/puddle/v2 v2.2.1 // indirect
 	github.com/klauspost/compress v1.18.0 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
-	github.com/libdns/libdns v1.1.0 // indirect
+	github.com/libdns/acmedns v0.5.0 // indirect
+	github.com/libdns/libdns v1.1.1 // indirect
 	github.com/manifoldco/promptui v0.9.0 // indirect
 	github.com/mastercactapus/proxyprotocol v0.0.4 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
