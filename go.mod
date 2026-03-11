@@ -6,9 +6,9 @@ require (
 	github.com/caddy-dns/acmedns v0.6.0
 	github.com/caddyserver/caddy/v2 v2.10.1
 	github.com/mholt/caddy-l4 v0.0.0-20240628163618-ca3e2f38f6e5
-	github.com/netsec-ethz/scion-apps v0.6.1-0.20251205083251-f2efcdffa5cb
-	github.com/quic-go/quic-go v0.54.1
-	github.com/scionproto-contrib/http-proxy v0.2.1-beta.1.0.20251010083953-5bdc593f86de
+	github.com/netsec-ethz/scion-apps v0.6.1-0.20260219144046-b23efdfde139
+	github.com/quic-go/quic-go v0.57.1
+	github.com/scionproto-contrib/http-proxy v0.2.1-beta.1.0.20260224130637-09130622804f
 	github.com/scionproto/scion v0.12.1-0.20241223103250-0b42cbc42486
 	go.uber.org/zap v1.27.0
 )
