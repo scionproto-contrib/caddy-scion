@@ -311,8 +311,8 @@ github.com/ncruces/go-strftime v0.1.9 h1:bY0MQC28UADQmHmaF5dgpLmImcShSi2kHU9XLdh
 github.com/ncruces/go-strftime v0.1.9/go.mod h1:Fwc5htZGVVkseilnfgOVb9mKy6w1naJmn9CehxcKcls=
 github.com/netsec-ethz/rains v0.5.1-0.20240619143424-8e9ef27f2403 h1:Ve8YXv3K9Oxlo9c4aQBYXMwe7Dx0Khv5qytdM2qTsco=
 github.com/netsec-ethz/rains v0.5.1-0.20240619143424-8e9ef27f2403/go.mod h1:YD8WuBUbAoxhvU/keqHboGDpFna9FSvklLLzTZSF7SE=
-github.com/netsec-ethz/scion-apps v0.6.1-0.20251205083251-f2efcdffa5cb h1:9jCH3SdwtJ2jZR+GEwAWQ1qGfVrJEeAKj4L8dkwU3zI=
-github.com/netsec-ethz/scion-apps v0.6.1-0.20251205083251-f2efcdffa5cb/go.mod h1:pySDPYFDGIlYV/GQb3zL4tIXaAZfVyLfkpbvX5hO9kU=
+github.com/netsec-ethz/scion-apps v0.6.1-0.20260219144046-b23efdfde139 h1:EqI/1yEg426no7kSiMa1u2GLLPbtJmT4P1kTITInxwI=
+github.com/netsec-ethz/scion-apps v0.6.1-0.20260219144046-b23efdfde139/go.mod h1:pySDPYFDGIlYV/GQb3zL4tIXaAZfVyLfkpbvX5hO9kU=
 github.com/opentracing/opentracing-go v1.1.0/go.mod h1:UkNAQd3GIcIGf0SeVgPpRdFStlNbqXla1AfSYxPUl2o=
 github.com/opentracing/opentracing-go v1.2.0 h1:uEJPy/1a5RIPAJ0Ov+OIO8OxWu77jEv+1B0VhjKrZUs=
 github.com/opentracing/opentracing-go v1.2.0/go.mod h1:GxEUsuufX4nBwe+T+Wl9TAgYrxe9dPLANfrWvHYVTgc=
@@ -355,8 +355,8 @@ github.com/russross/blackfriday/v2 v2.1.0 h1:JIOH55/0cWyOuilr9/qlrm0BSXldqnqwMsf
 github.com/russross/blackfriday/v2 v2.1.0/go.mod h1:+Rmxgy9KzJVeS9/2gXHxylqXiyQDYRxCVz55jmeOWTM=
 github.com/schollz/jsonstore v1.1.0 h1:WZBDjgezFS34CHI+myb4s8GGpir3UMpy7vWoCeO0n6E=
 github.com/schollz/jsonstore v1.1.0/go.mod h1:15c6+9guw8vDRyozGjN3FoILt0wpruJk9Pi66vjaZfg=
-github.com/scionproto-contrib/http-proxy v0.2.1-beta.1.0.20251010083953-5bdc593f86de h1:mCR2OzEC4ppnUGp8AYwlxK+hAVlyGfnFywXQxeJdohA=
-github.com/scionproto-contrib/http-proxy v0.2.1-beta.1.0.20251010083953-5bdc593f86de/go.mod h1:YaE/C9Hi64p0GjyEOPv/56p8pNVpjudmCcLIZ9N8bcw=
+github.com/scionproto-contrib/http-proxy v0.2.1-beta.1.0.20260224130637-09130622804f h1:axipAkMoL3GMceglC7NK4tcQMc8fHBy3gh4D78CJQZQ=
+github.com/scionproto-contrib/http-proxy v0.2.1-beta.1.0.20260224130637-09130622804f/go.mod h1:PBrXJJ98pgVs0jRfNfltgIAL8mGmDieGiiBOpzmks6I=
 github.com/scionproto/scion v0.12.1-0.20241223103250-0b42cbc42486 h1:7hYIHKVxnrrvRvlHYX7cskTvXHCdb6HfFMYyzpZCPmk=
 github.com/scionproto/scion v0.12.1-0.20241223103250-0b42cbc42486/go.mod h1:ZZdYvTNhrC3USJOP7XcMFFrwbyoYLGvTKb1L3aIzpxM=
 github.com/shopspring/decimal v1.4.0 h1:bxl37RwXBklmTi0C79JfXCEBD1cqqHt0bbgBAGFp81k=
